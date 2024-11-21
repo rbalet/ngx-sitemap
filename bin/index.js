@@ -2,5 +2,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var sitemap_generator_1 = require("./sitemap-generator");
-var sitemapGenerator = new sitemap_generator_1.SitemapGenerator(process.argv[2], process.argv[3], process.argv[4]);
+var sitemapGenerator = new sitemap_generator_1.SitemapGenerator(process.argv[2], process.argv[3], process.argv[4], process.argv[5], process.argv[6]);
 sitemapGenerator.process();

@@ -1,6 +1,15 @@
 import * as fs from "fs";
 import * as path from "path";
 
+export type NgxSitemapChangeFreq =
+  | "always"
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "yearly"
+  | "never";
+
 export class SitemapGenerator {
   private readonly SITEMAP_HEADER = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
@@ -8,14 +17,26 @@ export class SitemapGenerator {
   private readonly SITEMAP_FOOTER = `
 </urlset>`;
 
-  private readonly baseUrl: string;
   private readonly srcDirectory: string;
+  private readonly baseUrl: string;
+  private readonly lastMod: string;
+  private readonly changeFreq: NgxSitemapChangeFreq;
+  private readonly priority: number;
 
   private sitemapContent = "";
 
-  constructor(srcDirectory: string, baseUrl: string) {
-    this.baseUrl = this.withTrailingSlash(baseUrl);
+  constructor(
+    srcDirectory: string,
+    baseUrl: string,
+    lastMod?: string,
+    changeFreq?: string,
+    priority?: string
+  ) {
     this.srcDirectory = this.withTrailingSlash(srcDirectory);
+    this.baseUrl = this.withTrailingSlash(baseUrl);
+    this.lastMod = lastMod === "today" ? this._getToday() : lastMod;
+    this.changeFreq = changeFreq as NgxSitemapChangeFreq;
+    this.priority = Number(priority);
   }
 
   private _getToday() {
@@ -63,10 +84,23 @@ export class SitemapGenerator {
   private addToSitemap(file: string): void {
     let url = file.replace(this.srcDirectory, this.baseUrl);
     url = url.replace("/index.html", "");
+
+    const entries: string[] = [`<loc>${url}</loc>`];
+
+    if (this.lastMod) {
+      entries.push(`          <lastmod>${this.lastMod}</lastmod>`);
+    }
+    if (this.changeFreq) {
+      entries.push(`          <changefreq>${this.changeFreq}</changefreq>`);
+    }
+    if (this.priority) {
+      entries.push(`          <priority>${this.priority}</priority>`);
+    }
+
     this.sitemapContent += `
-    <url>
-        <loc>${url}</loc>
-    </url>`;
+      <url>
+          ${entries.join("\n")}
+      </url>`;
   }
 
   private writeSitemapToFile(): void {
