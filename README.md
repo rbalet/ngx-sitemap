@@ -10,11 +10,11 @@ npm install ngx-sitemap --save-dev
 ```
 
 ## Usage
-In order to work you must first prerender all routes to be included in the ``sitemap.xml``.
+In order to work you must first prerender all routes to be included in the `sitemap.xml`.
 
 Then, use it from the command line as follows:
 ```
-ngx-sitemap <srcDirectory> <baseUrl>
+ngx-sitemap <srcDirectory> <baseUrl> <lastMod> <changeFreq> <priority>
 ```
 
 Example:
@@ -22,7 +22,7 @@ Example:
 ngx-sitemap ./dist/prod/browser htts://www.example.com
 ```
 
-This will generate a ``sitemap.xml`` in the srcDirectory given.
+This will generate a `sitemap.xml` in the srcDirectory given.
 
 
 ## How it works
@@ -47,7 +47,7 @@ dist
         └── ...
 ```
 
-The Command expects the ``srcDirectory`` which in this case would be ``./dist/prod/browser``. It then lists all routes which end with ``index.html`` resulting in the following:
+The Command expects the `srcDirectory` which in this case would be `./dist/prod/browser`. It then lists all routes which end with `index.html` resulting in the following:
 ```
 [
     '/'
@@ -58,7 +58,7 @@ The Command expects the ``srcDirectory`` which in this case would be ``./dist/pr
 ]
 ```
 
-Once all routes are found they get written into the ``sitemap.xml`` as follows:
+Once all routes are found they get written into the `sitemap.xml` as follows:
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
@@ -80,7 +80,7 @@ Once all routes are found they get written into the ``sitemap.xml`` as follows:
 </urlset>
 ```
 
-Once deployed, the sitemap is available under ```https://www.example.com/sitemap.xml```.
+Once deployed, the sitemap is available under `https://www.example.com/sitemap.xml`.
 
 ## License
 [MIT](https://spdx.org/licenses/MIT.html)
